@@ -40,8 +40,6 @@ public class MainActivity extends FragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		mapFragment = (SupportMapFragment) getSupportFragmentManager()
-				.findFragmentById(R.id.map);
 		handler = new Handler();
 	}
 	
@@ -56,7 +54,13 @@ public class MainActivity extends FragmentActivity {
 	@Override
 	protected void onResume() {
 	    super.onResume();
-	    googleMap = mapFragment.getMap();
+	    setUpMapIfNeeded();
+	}
+	
+	private void setUpMapIfNeeded() {
+		if (googleMap == null) {
+			googleMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
+		}
 	    googleMap.setOnMarkerClickListener(new OnMarkerClickListener() {
 			
 			@Override
@@ -95,8 +99,7 @@ public class MainActivity extends FragmentActivity {
 				}
 			}
 		}
-		JSONArray coordsJSONArray = (JSONArray) JSONValue.parse(lines
-				.toString());
+		JSONArray coordsJSONArray = (JSONArray) JSONValue.parse(lines.toString());
 		double lat, lng;
 		if (markers == null) {
 			markers = new ArrayList<>();
