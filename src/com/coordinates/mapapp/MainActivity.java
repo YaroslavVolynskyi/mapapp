@@ -30,8 +30,16 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class MainActivity extends FragmentActivity {
 	
 	private GoogleMap googleMap;
+	
+	/**
+	 * poitns with coordinates on the map
+	 */
 	private List<Marker> markers;
 	private SupportMapFragment mapFragment;
+	
+	/**
+	 * handler for scheduling task
+	 */
 	private Handler handler;
 	private CameraPosition lastSelectedPosition;
 	private static final int DELAY = 2000;
@@ -42,7 +50,9 @@ public class MainActivity extends FragmentActivity {
 		setContentView(R.layout.activity_main);
 		handler = new Handler();
 	}
-	
+	/**
+	 * runnable for moving camera after delay
+	 */
 	private Runnable moveToCoords = new Runnable() {
 		
 		@Override
@@ -57,6 +67,9 @@ public class MainActivity extends FragmentActivity {
 	    setUpMapIfNeeded();
 	}
 	
+	/**
+	 * initialize map if needed, set on markers click listeners
+	 */
 	private void setUpMapIfNeeded() {
 		if (googleMap == null) {
 			googleMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
@@ -71,13 +84,17 @@ public class MainActivity extends FragmentActivity {
 						position,
 						Toast.LENGTH_SHORT).show();
 				lastSelectedPosition = new CameraPosition(marker.getPosition(), 14, 0, 0);
-				handler.postDelayed(moveToCoords, DELAY);
+				handler.postDelayed(moveToCoords, DELAY);   // move camera after delay
 				return false;
 			}
 		});
 	    markers = getMarkers();
 	}
 	
+	/**
+	 * read points with coordinates from json file from assets.
+	 * @return markers List
+	 */
 	private List<Marker> getMarkers() {
 		BufferedReader reader = null;
 		StringBuffer lines = new StringBuffer();
